@@ -863,6 +863,7 @@ public class AsyncSchdulerService {
                     .collect(Collectors.toList());*/
             dropsList = this.convertDocs2(resultList2);
             List<DocsVO> finallist = sortedDocs(dropsList);
+           /*
             String flagQuery = "Select XSDHDOC_0 ,XMISDROPDOC_0 ,XMISPICKDOC_0 ,XPRHDOC_0, XPRERECDOC_0, XPRDRECDLV_0, XPRDRECMIS_0 from "+dbSchema+".XX10CUSERS where XAUS_0='"+user+"'";
             List<Object[]> flagResults = entityManager.createNativeQuery(flagQuery).getResultList();
             boolean dlvFlag,pickFlag,miscDropFlag,miscPickFlag,preceitFlag, prereciptwithDLVpairedflg, prereciptwithMISpairedflg;
@@ -914,6 +915,7 @@ public class AsyncSchdulerService {
                     })
                         .collect(Collectors.toList());
             }
+            */
             log.info("filtered drops list ",finallist);
             return finallist;
         }
@@ -1205,6 +1207,8 @@ public class AsyncSchdulerService {
                     .collect(Collectors.toList());*/
             dropsList = this.convertDocs2(resultList2);
             List<DocsVO> finallist = sortedDocs(dropsList);
+
+           /*
             String flagQuery = "Select XSDHDOC_0 ,XMISDROPDOC_0 ,XMISPICKDOC_0 ,XPRHDOC_0, XPRERECDOC_0, XPRDRECDLV_0, XPRDRECMIS_0 from "+dbSchema+".XX10CUSERS where XAUS_0='"+user+"'";
             List<Object[]> flagResults = entityManager.createNativeQuery(flagQuery).getResultList();
             boolean dlvFlag,pickFlag,miscDropFlag,miscPickFlag,preceitFlag, prereciptwithDLVpairedflg, prereciptwithMISpairedflg;
@@ -1256,6 +1260,7 @@ public class AsyncSchdulerService {
                         })
                         .collect(Collectors.toList());
             }
+            */
             log.info("filtered drops list ",finallist);
             return finallist;
         }

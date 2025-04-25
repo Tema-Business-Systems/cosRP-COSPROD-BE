@@ -14,6 +14,7 @@ import java.util.Date;
 public class UserSiteVO {
       private String user;
       private String fcy;
+      private String defflg;
       private String cur;
       private String distunit;
       private String volunit;

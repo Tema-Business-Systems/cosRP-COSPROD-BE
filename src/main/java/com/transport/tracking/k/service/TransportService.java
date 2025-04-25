@@ -273,6 +273,7 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
                     }
 
                     siteVO.cur = curr;
+                    siteVO.defflg = usrsite.getDefflg();
                     siteVO.distunit = distunit;
                     siteVO.volunit = volunits;
                     siteVO.massunit = massunits;
