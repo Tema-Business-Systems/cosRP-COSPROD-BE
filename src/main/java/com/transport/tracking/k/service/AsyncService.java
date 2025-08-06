@@ -110,6 +110,10 @@ public class AsyncService {
         vehicleVO.setRouteCode(vehicle.getRouteCode());
         vehicleVO.setRouteCodeDesc(vehicle.getRouteCodeDesc());
 		vehicleVO.setIsStockExist(vehicle.getIsStockExist());
+        vehicleVO.setDristartdate(vehicle.getDristartdate());
+        vehicleVO.setDrienddate(vehicle.getDrienddate());
+        vehicleVO.setTraistartdate(vehicle.getTraistartdate());
+        vehicleVO.setTraienddate(vehicle.getTraienddate());
         String vehsite = vehicle.getFcy();
         String Veh = vehicle.getCodeyve();
         log.info("inside update validate");

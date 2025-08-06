@@ -39,8 +39,12 @@ public class VehicleVO {
       private String catego;
       private String model;
       private String trailer;
+      private String traistartdate;
+      private String traienddate;
       private List<String> equipmentList;
       private String driverid;
+      private String dristartdate;
+      private String drienddate;
       private double fixedcost;
       private BigDecimal ytollerance;
       private String drivername;
