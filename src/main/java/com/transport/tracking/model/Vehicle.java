@@ -73,8 +73,16 @@ public class Vehicle {
       private String model;
       @Column(name= "TRAILER_0")
       private String trailer;
+      @Column(name= "TRAI_STARTDATE")
+      private String traistartdate;
+      @Column(name= "TRAI_ENDDATE")
+      private String traienddate;
       @Column(name= "DRIVERID_0")
       private String driverid;
+      @Column(name= "DRI_STARTDATE")
+      private String dristartdate;
+      @Column(name= "DRI_ENDDATE")
+      private String drienddate;
       @Column(name= "FIXEDCOST_0")
       private double fixedcost;
       @Column(name= "XTOLLERANCE_0")

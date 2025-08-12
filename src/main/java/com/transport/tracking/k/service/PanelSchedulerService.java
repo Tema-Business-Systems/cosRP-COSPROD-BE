@@ -62,7 +62,7 @@ public class PanelSchedulerService {
 
     public List<DocsVO> getDocswithSelDate2(List<String> site, Date seldate, String user) {
         List<DocsVO> docsList = new ArrayList<>();
-        docsList = asyncSchdulerService.getDocsWithSelDate2(site, seldate, user);
+        docsList = asyncSchdulerService.getDocsWithSelDate3(site, seldate, user);
                // asyncScheduleService.getDocsWithSelDate2(site,seldate);
         return docsList;
     }
@@ -72,7 +72,7 @@ public class PanelSchedulerService {
 
         List<DocsVO> docsList = new ArrayList<>();
 
-        docsList = asyncSchdulerService.getDocsWithRange2(site,sdate,edate, user);
+        docsList = asyncSchdulerService.getDocsWithRange3(site,sdate,edate, user);
 
 
         return docsList;

@@ -53,6 +53,9 @@ public class AsyncService {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+
     @Value("${time.hours.add}")
     private int hours = 9;
 
@@ -110,6 +113,10 @@ public class AsyncService {
         vehicleVO.setRouteCode(vehicle.getRouteCode());
         vehicleVO.setRouteCodeDesc(vehicle.getRouteCodeDesc());
 		vehicleVO.setIsStockExist(vehicle.getIsStockExist());
+        vehicleVO.setDristartdate(vehicle.getDristartdate());
+        vehicleVO.setDrienddate(vehicle.getDrienddate());
+        vehicleVO.setTraistartdate(vehicle.getTraistartdate());
+        vehicleVO.setTraienddate(vehicle.getTraienddate());
         String vehsite = vehicle.getFcy();
         String Veh = vehicle.getCodeyve();
         log.info("inside update validate");
@@ -425,6 +432,12 @@ public class AsyncService {
                     .collect(Collectors.toList());
         }
         return CompletableFuture.completedFuture(driverVOList);
+    }
+
+    @Async
+    public CompletableFuture<List<Map<String, Object>>> getCustomers() {
+        List<Map<String, Object>> customers = customerRepository.getDepotCustomer();
+        return CompletableFuture.completedFuture(customers);
     }
 
     private DriverVO convert(Driver driver, List<String> driverList) {

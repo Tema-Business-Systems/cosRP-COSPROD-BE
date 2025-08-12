@@ -140,7 +140,7 @@ public class TransportService {
     private String UPDATE_PTHEADER_QUERY = "update {0}.{1} set {2} = ''{4}'' where {3} = ''{5}''";
     private String UPDATE_SINGLE_QUERY_MULTIPLE_COND = "update {0}.{1} set {2} = ''{3}'' where {4} = ''{5}'' AND {6} = ''{7}'' and {8} >= ''{9}''";
      private String UPDATE_doc_QUERY_AT_TripCreation = "update {0}.{1} set {2} = ''{6}'' , {3} = ''{7}'', {5} = {10}, {11} = ''{8}'',{12}={13},{14} = {15},{16} = ''{8}'',{17} = ''{18}''  where {4} = ''{9}''";
-	private String UPDATE_doc_QUERY = "update {0}.{1} set {2} = ''{12}'' , {3} = ''{13}'', {4} = ''{14}'', {5} = ''{15}'',{7} = ''{17}'',{8} =''{29}'',{9} =''{30}'',{10} =''{19}'',{11} =''{20}'',{21}=''{22}'',{23}=''{24}'',{25}=''{26}'',{27} = {28} where {6} = ''{16}''";
+	private String UPDATE_doc_QUERY = "update {0}.{1} set {2} = ''{12}'' , {3} = ''{13}'', {4} = ''{14}'', {5} = ''{15}'',{7} = ''{17}'',{8} =''{29}'',{9} =''{30}'',{10} =''{19}'',{11} =''{20}'',{21}=''{22}'',{23}=''{24}'',{25}=''{26}'',{27} = {28}, {31} = ''{32}'' where {6} = ''{16}''";
     private String DELTE_TRIP_QUERY = "delete from {0}.{1} where XNUMPC_0 = ''{2}''";
     private String DELTE_SINGLETRIP_QUERY = "delete from {0}.{1} where TRIPCODE = ''{2}''";
     private String SELECT_TRIP_QUERY = "SELECT * FROM {0}.{1} where XNUMPC_0 = ''{2}''";
@@ -590,6 +590,7 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
                     String docendDate = null != map.get("endDate") ? format.format(format.parse(map.get("endDate").toString())) : "";
                	    String customer = null != map.get("bpcode") ?  map.get("bpcode").toString() : "";
                     String Deptime = null != map.get("end") ? map.get("end").toString() : "";
+                    String individualDistance = null != map.get("individualDistance") ? map.get("individualDistance").toString() : "";
                     String SevTime = null != map.get("serTime") ? map.get("serTime").toString() : "";
                     String Traveltime = null != map.get("time") ? map.get("time").toString() : "";
                     String TravelDist = null != map.get("distance") ? map.get("distance").toString() : "";
@@ -608,7 +609,7 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
                     Date ddDate = format.parse(dDate);
                     Date selectedDate = format.parse(docDate);
                     Date enddate = format.parse(rtnDate);
-                    this.updateDocs(vr,Veh_code,docDate,Arrtime,BPTNUM,Deptime,docNum,map.get("docnum").toString(),driverid,tripno,trailer,comments,headertext,carriertext,loadertext,customer, sequenceNUm, StartDate, docendDate);
+                    this.updateDocs(vr,Veh_code,docDate,Arrtime,BPTNUM,Deptime,docNum,map.get("docnum").toString(),driverid,tripno,trailer,comments,headertext,carriertext,loadertext,customer, sequenceNUm, StartDate, docendDate,individualDistance);
 
 
                     sequenceNUm++;
@@ -1551,10 +1552,10 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
         }
 
 
-    private void updateDocs(String vr,String Veh_code,String ddate,String arvtime,String carrier, String Deptime, int docNum, String docnum,String driverid,int tripnum,String trail,String comments,String PTheader, String CarrierText, String LoaderText, String customer, int seqno,String startDate, String endDate)
+    private void updateDocs(String vr,String Veh_code,String ddate,String arvtime,String carrier, String Deptime, int docNum, String docnum,String driverid,int tripnum,String trail,String comments,String PTheader, String CarrierText, String LoaderText, String customer, int seqno,String startDate, String endDate, String individualDistance)
     {
         if(docNum == 1) {
-            this.updatedocument("SDELIVERY", "XX10C_NUMPC_0", "LICPLATE_0", "ETA_0", "ETD_0" , "SDHNUM_0","XDLV_STATUS_0","ARVDAT_0", "DPEDAT_0","BPTNUM_0","DRIVERID_0","XTRAILER_0",vr,Veh_code,ddate,arvtime,carrier,Deptime,docnum,1,driverid,"XROUTNBR_0",tripnum,trail,"XCOMMENT_0",comments,PTheader,docNum,"XSEQUENCE_0",seqno,startDate, endDate);
+            this.updatedocument("SDELIVERY", "XX10C_NUMPC_0", "LICPLATE_0", "ETA_0", "ETD_0" , "SDHNUM_0","XDLV_STATUS_0","ARVDAT_0", "DPEDAT_0","BPTNUM_0","DRIVERID_0","XTRAILER_0",vr,Veh_code,ddate,arvtime,carrier,Deptime,docnum,1,driverid,"XROUTNBR_0",tripnum,trail,"XCOMMENT_0",comments,PTheader,docNum,"XSEQUENCE_0",seqno,startDate, endDate, "XTOTDISTANCE_0", individualDistance);
 
             if(CarrierText.trim().length() > 0) {
                 this.carrierInstruction(CarrierText, docnum);
@@ -1567,7 +1568,7 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
             }
 
         }else if(docNum == 4) {
-            this.updatedocument("STOPREH", "XX10C_NUMPC_0", "XX10C_LICPLA_0", "ETA_0", "ETD_0",  "PRHNUM_0","XDLV_STATUS_0","ARVDAT_0", "DPEDAT_0","BPTNUM_0","DRIVERID_0","XTRAILER_0",vr,Veh_code,ddate,arvtime,carrier,Deptime,docnum,1,driverid,"XROUTNBR_0",tripnum,trail,"XCOMMENT_0",comments,PTheader,docNum,"XSEQUENCE_0",seqno,startDate, endDate);
+            this.updatedocument("STOPREH", "XX10C_NUMPC_0", "XX10C_LICPLA_0", "ETA_0", "ETD_0",  "PRHNUM_0","XDLV_STATUS_0","ARVDAT_0", "DPEDAT_0","BPTNUM_0","DRIVERID_0","XTRAILER_0",vr,Veh_code,ddate,arvtime,carrier,Deptime,docnum,1,driverid,"XROUTNBR_0",tripnum,trail,"XCOMMENT_0",comments,PTheader,docNum,"XSEQUENCE_0",seqno,startDate, endDate, "XTOTDISTANCE_0", individualDistance);
             log.info("at loader -4");
             log.info(LoaderText);
             if(LoaderText.trim().length() > 0) {
@@ -1576,12 +1577,12 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
             }
 
         }else if(docNum == 2) {
-            this.updatedocument("XX10CREC", "XX10C_NUMPC_0", "XX10C_LICPLA_0", "XETA_0", "XETD_0", "XPTHNUM_0","XDLV_STATUS_0","XARVDAT_0", "XDPEDAT_0","XBPTNUM_0","XDRIVERID_0","XTRAILER_0",vr,Veh_code,ddate,arvtime,carrier,Deptime,docnum,1,driverid,"XROUTNBR_0",tripnum,trail,"XCOMMENT_0",comments,PTheader,docNum,"XSEQUENCE_0",seqno,startDate, endDate);
+            this.updatedocument("XX10CREC", "XX10C_NUMPC_0", "XX10C_LICPLA_0", "XETA_0", "XETD_0", "XPTHNUM_0","XDLV_STATUS_0","XARVDAT_0", "XDPEDAT_0","XBPTNUM_0","XDRIVERID_0","XTRAILER_0",vr,Veh_code,ddate,arvtime,carrier,Deptime,docnum,1,driverid,"XROUTNBR_0",tripnum,trail,"XCOMMENT_0",comments,PTheader,docNum,"XSEQUENCE_0",seqno,startDate, endDate, "XTOTDISTANCE_0", individualDistance);
         }else if(docNum == 3) {
-            this.updatedocument("SRETURN", "XX10C_NUMPC_0", "XX10C_LICPLA_0", "ETAR_0", "ETDR_0", "SRHNUM_0","XDLV_STATUS_0","ARVDATR_0", "DPEDATR_0","XX10C_BPTNUM_0","DRIVERID_0","XTRAILER_0",vr,Veh_code,ddate,arvtime,carrier,Deptime,docnum,1,driverid,"XROUTNBR_0",tripnum,trail,"XCOMMENT_0",comments,PTheader,docNum,"XSEQUENCE_0",seqno,startDate, endDate);
+            this.updatedocument("SRETURN", "XX10C_NUMPC_0", "XX10C_LICPLA_0", "ETAR_0", "ETDR_0", "SRHNUM_0","XDLV_STATUS_0","ARVDATR_0", "DPEDATR_0","XX10C_BPTNUM_0","DRIVERID_0","XTRAILER_0",vr,Veh_code,ddate,arvtime,carrier,Deptime,docnum,1,driverid,"XROUTNBR_0",tripnum,trail,"XCOMMENT_0",comments,PTheader,docNum,"XSEQUENCE_0",seqno,startDate, endDate, "XTOTDISTANCE_0", individualDistance);
         }
         else if(docNum == 6) {
-            this.updatedocument("XX10CMISSTO", "XX10C_NUMPC_0", "XX10C_LICPLA_0", "ETA_0", "ETD_0", "XMSNUM_0","XDLV_STATUS_0","ARVDAT_0", "DPEDAT_0","BPTNUM_0","DRIVERID_0","XTRAILER_0",vr,Veh_code,ddate,arvtime,carrier,Deptime,docnum,1,driverid,"XROUTNBR_0",tripnum,trail,"XCOMMENT_0",comments,PTheader,docNum,"XSEQUENCE_0",seqno,startDate, endDate);
+            this.updatedocument("XX10CMISSTO", "XX10C_NUMPC_0", "XX10C_LICPLA_0", "ETA_0", "ETD_0", "XMSNUM_0","XDLV_STATUS_0","ARVDAT_0", "DPEDAT_0","BPTNUM_0","DRIVERID_0","XTRAILER_0",vr,Veh_code,ddate,arvtime,carrier,Deptime,docnum,1,driverid,"XROUTNBR_0",tripnum,trail,"XCOMMENT_0",comments,PTheader,docNum,"XSEQUENCE_0",seqno,startDate, endDate, "XTOTDISTANCE_0", individualDistance);
         }
     }
 
@@ -1730,14 +1731,14 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
     }
 
     //update document
-    private void updatedocument(String tableName, String field1, String field2, String filed3, String field4, String field5, String field6,String field7, String field8, String field9,String field10,String field12,String vr,String Veh_code,String ddate,String arvtime,String Carrier,String deptime, String docnum,int dly_status,String DriverID,String field11,int tripno,String trail,String field13,String comments,String PTheader,int type,String field14 , int seq,String sdate , String edate)
+    private void updatedocument(String tableName, String field1, String field2, String filed3, String field4, String field5, String field6,String field7, String field8, String field9,String field10,String field12,String vr,String Veh_code,String ddate,String arvtime,String Carrier,String deptime, String docnum,int dly_status,String DriverID,String field11,int tripno,String trail,String field13,String comments,String PTheader,int type,String field14 , int seq,String sdate , String edate, String indDistField, String indDistValue)
     {
 
         String queryStr,queryStr1  = null;
         String NewTexteCode = "";
         log.info("inside update document");
         // String date = format.format(currentDate);
-        queryStr =  MessageFormat.format(UPDATE_doc_QUERY, dbSchema, tableName, field1, field2, filed3,field4,field5,field6, field7, field8,field9,field10,vr,Veh_code,arvtime,deptime,docnum,dly_status,ddate,Carrier,DriverID,field11,tripno,field12,trail,field13,comments, field14 , seq, sdate, edate);
+        queryStr =  MessageFormat.format(UPDATE_doc_QUERY, dbSchema, tableName, field1, field2, filed3,field4,field5,field6, field7, field8,field9,field10,vr,Veh_code,arvtime,deptime,docnum,dly_status,ddate,Carrier,DriverID,field11,tripno,field12,trail,field13,comments, field14 , seq, sdate, edate, indDistField, indDistValue);
         entityManager.createNativeQuery(queryStr).executeUpdate();
         String linkdata = "";
         Drops drops = null;
@@ -2079,13 +2080,14 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
                       String Arrtime = null != map.get("arrival") ? map.get("arrival").toString() : "";
                       String customer = null != map.get("bpcode") ?  map.get("bpcode").toString() : "";
                       String Deptime = null != map.get("end") ? map.get("end").toString() : "";
+                      String individualDistance = null != map.get("individualDistance") ? map.get("individualDistance").toString() : "";
                       String SevTime = null != map.get("serTime") ? map.get("serTime").toString() : "";
                       String Traveltime = null != map.get("time") ? map.get("time").toString() : "";
                       String TravelDist = null != map.get("distance") ? map.get("distance").toString() : "";
                       String headertext = null != map.get("noteMessage") ? map.get("noteMessage").toString() : "";
                       String carriertext = null != map.get("CarrierMessage") ? map.get("CarrierMessage").toString() : "";
                       String loadertext = null != map.get("loaderMessage") ? map.get("loaderMessage").toString() : "";
-                      this.updateDocs(vr, Veh_code, docDate, Arrtime, BPTNUM, Deptime, docNum, map.get("docnum").toString(), driverid, tripno, trailer, comments, headertext, carriertext, loadertext, customer, sequenceNUm,StartDate,docendDate);
+                      this.updateDocs(vr, Veh_code, docDate, Arrtime, BPTNUM, Deptime, docNum, map.get("docnum").toString(), driverid, tripno, trailer, comments, headertext, carriertext, loadertext, customer, sequenceNUm,StartDate,docendDate, individualDistance);
                   }
                   else {
                        log.info("Trip is updating");

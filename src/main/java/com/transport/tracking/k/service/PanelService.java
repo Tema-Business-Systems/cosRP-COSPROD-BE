@@ -99,12 +99,14 @@ public class PanelService {
             CompletableFuture<List<EquipmentVO>> equipmentFuture = asyncService.getEquipments(site, map.get(TransportConstants.EQUIPMENT));
             CompletableFuture<List<TrailVO>> trailFuture = asyncService.getTrails(site, map.get(TransportConstants.TRAILER),date);
             CompletableFuture<List<DriverVO>> driverFuture = asyncService.getDrivers(site, map.get(TransportConstants.DRIVER),date);
+            CompletableFuture<List<Map<String,Object>>> customerFuture = asyncService.getCustomers();
             CompletableFuture.allOf(vehicleFuture, equipmentFuture).join();
 
             vehiclePanelVO.vehicles = vehicleFuture.get();
             vehiclePanelVO.equipments = equipmentFuture.get();
             vehiclePanelVO.trails = trailFuture.get();
             vehiclePanelVO.drivers = driverFuture.get();
+            vehiclePanelVO.customers = customerFuture.get();
 
         }catch (Exception e) {
             e.printStackTrace();

@@ -843,6 +843,7 @@ public class AsyncSchdulerService {
 
 
 
+    //Older method for fetch doc based on date
     public List<DocsVO> getDocsWithSelDate2(List<String> site, Date seldate, String user) {
         List<Docs> drops = null;
         List<DocsVO> dropsList = new ArrayList<>();
@@ -924,6 +925,68 @@ public class AsyncSchdulerService {
             dropsList = emptyDocs;
         }
         return dropsList;
+    }
+    //newer method for fetch doc based on date and sagex3 side selected users checkbox--Added by Shubham
+    public List<DocsVO> getDocsWithSelDate3(List<String> site, Date seldate, String user) {
+        List<DocsVO> dropsList = new ArrayList<>();
+        Map<String, String> paramMap = new HashMap<>();
+        List<Map<String, Object>> resultList2;
+        String Sites = this.ListtoString(site);
+
+        if (!StringUtils.isEmpty(site)) {
+            resultList2 = jdbcTemplate.queryForList(
+                    MessageFormat.format(DOCS_QUERY2, dbSchema,
+                            MessageFormat.format(SITE_DATE, Sites, dateFormat.format(seldate))
+                    ), paramMap);
+        } else {
+            resultList2 = jdbcTemplate.queryForList(
+                    MessageFormat.format(DOCS_QUERY2, dbSchema,
+                            MessageFormat.format(ONLY_DATE, dateFormat.format(seldate), "d.DOCDATE", "d.TRIPNO", "d.SEQ")
+                    ), paramMap);
+        }
+
+        if (CollectionUtils.isEmpty(resultList2)) {
+            return dropsList;
+        }
+
+        dropsList = this.convertDocs2(resultList2);
+        List<DocsVO> finallist = sortedDocs(dropsList);
+
+        String flagQuery = "SELECT XSDHDOC_0, XMISDROPDOC_0, XMISPICKDOC_0, XPRHDOC_0, XPRERECDOC_0, XPRDRECDLV_0 " +
+                "FROM " + dbSchema + ".XX10CUSERS WHERE XAUS_0 = '" + user + "'";
+        List<Object[]> flagResults = entityManager.createNativeQuery(flagQuery).getResultList();
+
+        if (flagResults.isEmpty()) {
+            return finallist;
+        }
+
+        Object[] flags = flagResults.get(0);
+        boolean dlvFlag        = (byte) flags[0] == 2;
+        boolean miscDropFlag   = (byte) flags[1] == 2;
+        boolean miscPickFlag   = (byte) flags[2] == 2;
+        boolean pickFlag       = (byte) flags[3] == 2;
+        boolean preceiptFlag   = (byte) flags[4] == 2;
+        boolean pairedDlvFlag  = (byte) flags[5] == 2;
+
+        return finallist.stream()
+                .filter(doc -> {
+                    String docType = doc.getRouteTag();
+                    String pairedList = doc.getPairedList();
+                    boolean isPaired = pairedList != null && !pairedList.replaceAll("^\\s+|\\s+$", "").isEmpty();
+
+                    if (isPaired && pairedDlvFlag) {
+                        return true;
+                    }
+                        switch (docType != null ? docType.trim().toUpperCase() : "") {
+                            case "DLV":       return !isPaired && dlvFlag;
+                            case "MISCDROP":  return !isPaired && miscDropFlag;
+                            case "MISCPICK":  return !isPaired && miscPickFlag;
+                            case "PCKT":      return !isPaired && pickFlag;
+                            case "RECPT":  return !isPaired && preceiptFlag;
+                            default:          return false;
+                        }
+                })
+                .collect(Collectors.toList());
     }
 
     private DocsVO convertDocs(Docs drops) {
@@ -1180,6 +1243,7 @@ public class AsyncSchdulerService {
         return dropsList;
     }
 
+    //Old method getDocsWithRange2 check getDocsWithRange3
     public List<DocsVO> getDocsWithRange2(List<String> site, Date sdate, Date edate, String user) {
         List<Docs> drops = null;
         List<DocsVO> dropsList = new ArrayList<>();
@@ -1272,7 +1336,83 @@ public class AsyncSchdulerService {
 
         return dropsList;
     }
+    //new method for getting docs based on sagex3 scheduler selection--By Shubham
+    public List<DocsVO> getDocsWithRange3(List<String> site, Date sdate, Date edate, String user) {
+        List<DocsVO> dropsList = new ArrayList<>();
+        Map<String, String> paramMap = new HashMap<>();
+        List<Map<String, Object>> resultList2;
+        String Sites = this.ListtoString(site);
 
+        log.info(site.toString());
+
+        if (!StringUtils.isEmpty(site)) {
+            resultList2 = jdbcTemplate.queryForList(
+                    MessageFormat.format(DOCS_QUERY2, dbSchema,
+                            MessageFormat.format(SITE_DATERANGE, Sites, dateFormat.format(sdate), dateFormat.format(edate))
+                    ),
+                    paramMap
+            );
+        } else {
+            resultList2 = jdbcTemplate.queryForList(
+                    MessageFormat.format(DOCS_QUERY2, dbSchema,
+                            MessageFormat.format(ONLY_DATE, dateFormat.format(sdate), dateFormat.format(edate), "d.DOCDATE", "d.TRIPNO", "d.SEQ")
+                    ),
+                    paramMap
+            );
+        }
+
+        if (!CollectionUtils.isEmpty(resultList2)) {
+            dropsList = this.convertDocs2(resultList2);
+            List<DocsVO> finallist = sortedDocs(dropsList);
+
+            String flagQuery = "SELECT XSDHDOC_0, XMISDROPDOC_0, XMISPICKDOC_0, XPRHDOC_0, XPRERECDOC_0, XPRDRECDLV_0 " +
+                    "FROM " + dbSchema + ".XX10CUSERS WHERE XAUS_0 = '" + user + "'";
+            List<Object[]> flagResults = entityManager.createNativeQuery(flagQuery).getResultList();
+
+            if (!flagResults.isEmpty()) {
+                log.info("Applying checkbox filtering based on user flags");
+                Object[] flags = flagResults.get(0);
+                boolean dlvFlag        = (byte) flags[0] == 2;
+                boolean miscDropFlag   = (byte) flags[1] == 2;
+                boolean miscPickFlag   = (byte) flags[2] == 2;
+                boolean pickFlag       = (byte) flags[3] == 2;
+                boolean preceiptFlag   = (byte) flags[4] == 2;
+                boolean pairedDlvFlag  = (byte) flags[5] == 2;
+
+                return finallist.stream()
+                        .filter(doc -> {
+                            String docType = doc.getRouteTag();
+                            String pairedList = doc.getPairedList();
+
+                            boolean isPaired = pairedList != null && !pairedList.replaceAll("^\\s+|\\s+$", "").isEmpty();
+
+                            if (isPaired && pairedDlvFlag) {
+                                return true;
+                            }
+                            switch (docType != null ? docType.trim().toUpperCase() : "") {
+                                case "DLV":
+                                    return !isPaired && dlvFlag;
+                                case "MISCDROP":
+                                    return !isPaired && miscDropFlag;
+                                case "MISCPICK":
+                                    return !isPaired && miscPickFlag;
+                                case "PCKT":
+                                    return !isPaired && pickFlag;
+                                case "RECPT":
+                                    return !isPaired && preceiptFlag;
+                                default:
+                                    return false;
+                            }
+                        })
+                        .collect(Collectors.toList());
+
+            } else {
+                return finallist;
+            }
+        } else {
+            return new ArrayList<>();
+        }
+    }
 
     public List<DocsVO> sortedDocs (List<DocsVO> docsVOS) {
            log.info("Inside srotedDocs");

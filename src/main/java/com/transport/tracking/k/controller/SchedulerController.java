@@ -337,11 +337,4 @@ public class SchedulerController {
 
         return transportService.getTripsWithRange(site, sdate , edate);
     }
-
-
-
-
-
-
-
 }
