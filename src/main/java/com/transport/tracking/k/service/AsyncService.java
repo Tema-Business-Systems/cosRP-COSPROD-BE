@@ -434,6 +434,7 @@ public class AsyncService {
         return CompletableFuture.completedFuture(driverVOList);
     }
 
+    //For adding customer details--Added by Shubham
     @Async
     public CompletableFuture<List<Map<String, Object>>> getCustomers() {
         List<Map<String, Object>> customers = customerRepository.getDepotCustomer();
