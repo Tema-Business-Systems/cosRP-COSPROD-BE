@@ -209,6 +209,8 @@ public class CacheService {
     private TripVO getTripVO(Trip trip) {
         TripVO tripVO = new TripVO();
         BeanUtils.copyProperties(trip, tripVO);
+        tripVO.setArrivalDepot(trip.getXsdepot());
+        tripVO.setDepartureDepot(trip.getXddepot());
         tripVO.setItemCode(trip.getTripCode());
         if(Objects.isNull(trip.getStartIndex())) {
             tripVO.setStartIndex(0);

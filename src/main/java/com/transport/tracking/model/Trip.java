@@ -166,6 +166,11 @@ public class Trip implements Serializable {
       @Column(name= "UOM_VOLUME")
       private String uom_volume;
 
+      @Column(name="XSDEPOT")
+      private String xsdepot;
+
+      @Column(name="XDDEPOT")
+      private String xddepot;
 
       @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
       @JoinColumn(name = "TRIPCODE", referencedColumnName = "XNUMPC_0", insertable = false, updatable = false)

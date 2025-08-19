@@ -154,5 +154,6 @@ public class TripVO {
       private String doc_volume;
       private String uom_volume;
 	      private String routeStatus;
-
+      private String arrivalDepot;
+      private String departureDepot;
 }
