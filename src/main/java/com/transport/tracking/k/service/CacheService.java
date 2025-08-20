@@ -59,7 +59,9 @@ public class CacheService {
             tripsList = tripRepository.findByDocdate(sdate);
         }
         if(!CollectionUtils.isEmpty(tripsList)) {
-            return tripsList.stream().map(a -> getTripVO(a)).collect(Collectors.toList());
+//            return tripsList.stream().map(a -> getTripVO(a)).collect(Collectors.toList());
+            return tripsList.stream().map(this::getTripVO)
+                    .filter(vo -> !Arrays.asList(5,6,7,10).contains(vo.getLvsStatus())).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }
@@ -201,7 +203,8 @@ public class CacheService {
             tripsList = tripRepository.findByDocdate(date);
         }
         if(!CollectionUtils.isEmpty(tripsList)) {
-            return tripsList.stream().map(a -> getTripVO(a)).collect(Collectors.toList());
+//            return tripsList.stream().map(a -> getTripVO(a)).collect(Collectors.toList());
+            return tripsList.stream().map(this::getTripVO).filter(vo -> !Arrays.asList(5,6,7,10).contains(vo.getLvsStatus())).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }

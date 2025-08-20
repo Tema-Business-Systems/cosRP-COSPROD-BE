@@ -957,7 +957,7 @@ public class AsyncSchdulerService {
         List<Object[]> flagResults = entityManager.createNativeQuery(flagQuery).getResultList();
 
         if (flagResults.isEmpty()) {
-            return finallist;
+            return finallist.stream().filter(doc -> !"4".equals(doc.getDlvystatus())).collect(Collectors.toList());
         }
 
         Object[] flags = flagResults.get(0);
@@ -974,6 +974,9 @@ public class AsyncSchdulerService {
                     String pairedList = doc.getPairedList();
                     boolean isPaired = pairedList != null && !pairedList.replaceAll("^\\s+|\\s+$", "").isEmpty();
 
+                    if("4".equals(doc.getDlvystatus())){
+                        return false;
+                    }
                     if (isPaired && pairedDlvFlag) {
                         return true;
                     }
@@ -1386,6 +1389,9 @@ public class AsyncSchdulerService {
 
                             boolean isPaired = pairedList != null && !pairedList.replaceAll("^\\s+|\\s+$", "").isEmpty();
 
+                            if("4".equals(doc.getDlvystatus())) {
+                                return false;
+                            }
                             if (isPaired && pairedDlvFlag) {
                                 return true;
                             }
@@ -1407,7 +1413,7 @@ public class AsyncSchdulerService {
                         .collect(Collectors.toList());
 
             } else {
-                return finallist;
+                return finallist.stream().filter(doc -> !"4".equals(doc.getDlvystatus())).collect(Collectors.toList());
             }
         } else {
             return new ArrayList<>();
