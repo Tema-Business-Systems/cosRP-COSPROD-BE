@@ -69,9 +69,9 @@ public class VehicleVO {
       private double heigth;
       private double width;
       private String tclcod;
-	     private String isStockExist;
+      private String isStockExist;
       private String routeCode;
       private String routeCodeDesc;
-
-
+      private String supplierList;
+      private Integer allSupplier;
 }

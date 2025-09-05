@@ -139,5 +139,9 @@ public class Vehicle {
       private String routeCode;
       @Column(name= "ROUTECODEDESC")
       private String routeCodeDesc;
+      @Column(name = "SUPPLIERLIST")
+      private String supplierList;
+      @Column(name = "ALLSUPPLIER")
+      private Integer allSupplier;
 
 }

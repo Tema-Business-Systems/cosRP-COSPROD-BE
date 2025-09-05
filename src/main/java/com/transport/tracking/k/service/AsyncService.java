@@ -117,6 +117,8 @@ public class AsyncService {
         vehicleVO.setDrienddate(vehicle.getDrienddate());
         vehicleVO.setTraistartdate(vehicle.getTraistartdate());
         vehicleVO.setTraienddate(vehicle.getTraienddate());
+        vehicleVO.setAllSupplier(vehicle.getAllSupplier());
+        vehicleVO.setSupplierList(vehicle.getSupplierList());
         String vehsite = vehicle.getFcy();
         String Veh = vehicle.getCodeyve();
         log.info("inside update validate");
