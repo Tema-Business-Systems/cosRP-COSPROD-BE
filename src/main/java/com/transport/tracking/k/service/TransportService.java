@@ -174,6 +174,21 @@ private String UPDATE_doc_QUERY_AFTER_doc_DELETION = "update {0}.{1} SET XX10C_N
 private static final String SELECT_ALLOCATION_QUERY_UPD = "SELECT * FROM {schema}.{table} WHERE PRHNUM_0 = :prhnum AND PRELIN_0 = :prelin";
 
 private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{table} WHERE PRHNUM_0 = :prhnum AND PRELIN_0 = :prelin";
+    private String UPDATE_doc_QUERY_AFTER_TRIP_DELETION_FIXED =
+            "update {0}.{1} SET " +
+                    "XX10C_NUMPC_0 = ''{3}''," +
+                    "{5} = ''{3}''," +
+                    "{6} = ''{3}''," +
+                    "{7} = ''{3}''," +
+                    "XDLV_STATUS_0 = {4}," +
+                    "{8} = ''{3}''," +
+                    "{9} = ''{3}''," +
+                    "{10} = ''{3}''," +
+                    "{11} = ''{3}''," +
+                    "{12} = ''{3}''," +
+                    "{13} = ''{3}''," +
+                    "{14} = ''{3}'' " +
+                    "where XX10C_NUMPC_0 = ''{2}''";
 
 
 
@@ -1379,7 +1394,7 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
         try {
             List<Object> list = entityManager.createNativeQuery(MessageFormat.format(SELECT_DOC_CHECK_QUERY, dbSchema, "SDELIVERY", itemCode)).getResultList();
             if (list.size() > 0) {
-                entityManager.createNativeQuery(MessageFormat.format(UPDATE_doc_QUERY_AFTER_TRIP_DELETION, dbSchema, "SDELIVERY", itemCode,"",8,"LICPLATE_0","ETA_0","ETD_0","BPTNUM_0","DRIVERID_0","XTRAILER_0","XROUTNBR_0","ARVDAT_0","DPEDAT_0","XCOMMENT_0")).executeUpdate();
+                entityManager.createNativeQuery(MessageFormat.format(UPDATE_doc_QUERY_AFTER_TRIP_DELETION_FIXED, dbSchema, "SDELIVERY", itemCode,"",8,"LICPLATE_0","ETA_0","ETD_0","BPTNUM_0","DRIVERID_0","XTRAILER_0","TRLLICPLATE_0","XROUTNBR_0","ARVDAT_0","DPEDAT_0","XCOMMENT_0")).executeUpdate();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1388,7 +1403,7 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
         try {
             List<Object> list = entityManager.createNativeQuery(MessageFormat.format(SELECT_DOC_CHECK_QUERY, dbSchema, "STOPREH", itemCode)).getResultList();
             if (list.size() > 0) {
-                entityManager.createNativeQuery(MessageFormat.format(UPDATE_doc_QUERY_AFTER_TRIP_DELETION, dbSchema, "STOPREH", itemCode,"",8,"XX10C_LICPLA_0","ETA_0","ETD_0","BPTNUM_0","DRIVERID_0","XTRAILER_0","XROUTNBR_0","ARVDAT_0","DPEDAT_0","XCOMMENT_0")).executeUpdate();
+                entityManager.createNativeQuery(MessageFormat.format(UPDATE_doc_QUERY_AFTER_TRIP_DELETION_FIXED, dbSchema, "STOPREH", itemCode,"",8,"XX10C_LICPLA_0","ETA_0","ETD_0","BPTNUM_0","DRIVERID_0","XTRAILER_0","TRLLICPLATER_0","XROUTNBR_0","ARVDAT_0","DPEDAT_0","XCOMMENT_0")).executeUpdate();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1397,7 +1412,7 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
         try {
             List<Object> list = entityManager.createNativeQuery(MessageFormat.format(SELECT_DOC_CHECK_QUERY, dbSchema, "SRETURN", itemCode)).getResultList();
             if (list.size() > 0) {
-                entityManager.createNativeQuery(MessageFormat.format(UPDATE_doc_QUERY_AFTER_TRIP_DELETION, dbSchema, "SRETURN", itemCode,"",8,"XX10C_LICPLA_0","ETAR_0","ETDR_0","XX10C_BPTNUM_0","DRIVERID_0","XTRAILER_0","XROUTNBR_0","ARVDATR_0","DPEDATR_0","XCOMMENT_0")).executeUpdate();
+                entityManager.createNativeQuery(MessageFormat.format(UPDATE_doc_QUERY_AFTER_TRIP_DELETION_FIXED, dbSchema, "SRETURN", itemCode,"",8,"XX10C_LICPLA_0","ETAR_0","ETDR_0","XX10C_BPTNUM_0","DRIVERID_0","XTRAILER_0","TRLLICPLATER_0","XROUTNBR_0","ARVDATR_0","DPEDATR_0","XCOMMENT_0")).executeUpdate();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1406,7 +1421,7 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
         try {
             List<Object> list = entityManager.createNativeQuery(MessageFormat.format(SELECT_DOC_CHECK_QUERY, dbSchema, "XX10CREC", itemCode)).getResultList();
             if (list.size() > 0) {
-                entityManager.createNativeQuery(MessageFormat.format(UPDATE_doc_QUERY_AFTER_TRIP_DELETION, dbSchema, "XX10CREC", itemCode,"",8,"XX10C_LICPLA_0","XETA_0","XETD_0","XBPTNUM_0","XDRIVERID_0","XTRAILER_0","XROUTNBR_0","XARVDAT_0","XDPEDAT_0","XCOMMENT_0")).executeUpdate();
+                entityManager.createNativeQuery(MessageFormat.format(UPDATE_doc_QUERY_AFTER_TRIP_DELETION_FIXED, dbSchema, "XX10CREC", itemCode,"",8,"XX10C_LICPLA_0","XETA_0","XETD_0","XBPTNUM_0","XDRIVERID_0","XTRAILER_0","XTRLLICPLATE_0","XROUTNBR_0","XARVDAT_0","XDPEDAT_0","XCOMMENT_0")).executeUpdate();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1417,7 +1432,7 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
         try {
             List<Object> list = entityManager.createNativeQuery(MessageFormat.format(SELECT_DOC_CHECK_QUERY, dbSchema, "XX10CMISSTO", itemCode)).getResultList();
             if (list.size() > 0) {
-                entityManager.createNativeQuery(MessageFormat.format(UPDATE_doc_QUERY_AFTER_VR_DELETION, dbSchema, "XX10CMISSTO", itemCode,"",8,"XX10C_LICPLA_0","ETA_0","ETD_0","BPTNUM_0","DRIVERID_0","XTRAILER_0","XROUTNBR_0","ARVDAT_0","DPEDAT_0","XCOMMENT_0")).executeUpdate();
+                entityManager.createNativeQuery(MessageFormat.format(UPDATE_doc_QUERY_AFTER_VR_DELETION, dbSchema, "XX10CMISSTO", itemCode,"",8,"XX10C_LICPLA_0","ETA_0","ETD_0","BPTNUM_0","DRIVERID_0","XTRAILER_0","TRLLICPLATE_0","XROUTNBR_0","ARVDAT_0","DPEDAT_0","XCOMMENT_0")).executeUpdate();
             }
         } catch (Exception e) {
             e.printStackTrace();
