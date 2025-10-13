@@ -373,6 +373,44 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
         return ls;
     }
 
+    public void unlockTrips(List<TripVO> tripVOList) {
+        for(TripVO tripvo : tripVOList) {
+            List<TripVO> tempVO = new ArrayList<>();
+            tempVO.add(tripvo);
+            unlockTrip(tripvo);
+        }
+    }
+
+    public void unlockTrip(TripVO tripVOList) {
+
+        String itemCode = tripVOList.getItemCode();
+        try {
+            List<Object> list = entityManager.createNativeQuery(MessageFormat.format(SELECT_TRIP_QUERY, dbSchema, "XX10CPLANCHA", itemCode)).getResultList();
+            if (list.size() > 0) {
+                entityManager.createNativeQuery(MessageFormat.format(DELTE_TRIP_QUERY, dbSchema, "XX10CPLANCHA", itemCode)).executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            List<Object> list = entityManager.createNativeQuery(MessageFormat.format(SELECT_TRIP_QUERY, dbSchema, "XX10CPLANCHD", itemCode)).getResultList();
+            if (list.size() > 0) {
+                entityManager.createNativeQuery(MessageFormat.format(DELTE_TRIP_QUERY, dbSchema, "XX10CPLANCHD", itemCode)).executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // update trip to lock = 0;
+        try {
+            List<Object> list = entityManager.createNativeQuery(MessageFormat.format(SELECT_SINGLETRIP_QUERY, dbSchema, "XX10TRIPS", itemCode)).getResultList();
+            if (list.size() > 0) {
+                entityManager.createNativeQuery(MessageFormat.format(UPDATE_SINGLE_QUERY_INT, dbSchema, "XX10TRIPS","lock","TRIPCODE",0, itemCode)).executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public List<VehRouteDetail> listVehRouteDetails(String vrnum) {
         log.info("Transport service is loaded...");
@@ -2259,6 +2297,7 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
 
     }
     private void setTrip(Trip trip, TripVO tripVO) {
+        log.info("Entering setTrip for TripCode: {}", tripVO.getItemCode());
         trip.setTripCode(tripVO.getItemCode());
         trip.setCode(tripVO.getCode());
         trip.setDriverName(tripVO.getDriverName());
@@ -2301,6 +2340,7 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
         trip.setEndTime(tripVO.getEndTime());
         trip.setCapacities(tripVO.getCapacities());
         trip.setStartIndex(tripVO.getStartIndex());
+        log.info("Setting optistatus for TripCode {}: {}", tripVO.getItemCode(), tripVO.getOptistatus());
         trip.setOptistatus(tripVO.getOptistatus());
         trip.setUomTime(tripVO.getUomTime());
         trip.setTotalTime(tripVO.getTotalTime());
@@ -2343,9 +2383,16 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
             trip.setTrialer(trailer.replaceAll("'", "''"));
             trip.setTotalObject(totalObject.replaceAll("'", "''"));
             trip.setVehicle(vehicle.replaceAll("'", "''"));
+            log.info("setTrip JSON fields set for TripCode {}. Pickup size: {}, Drop size: {}, TotalObject size: {}",
+                    tripVO.getItemCode(),
+                    tripVO.getPickupObject() != null ? ((List<?>) tripVO.getPickupObject()).size() : 0,
+                    tripVO.getDropObject() != null ? ((List<?>) tripVO.getDropObject()).size() : 0,
+                    tripVO.getTotalObject() != null ? tripVO.getTotalObject().toString().length() : 0
+            );
         }catch (Exception e) {
             e.printStackTrace();
         }
+        log.info("Exiting setTrip for TripCode {} with optistatus={}", tripVO.getItemCode(), trip.getOptistatus());
     }
 
     private void restrictsOtherDocuments(TripVO tripVO) {

@@ -9,6 +9,8 @@ import com.transport.tracking.model.Vehicle;
 import com.transport.tracking.model.Trip;
 import com.transport.tracking.model.*;
 import com.transport.tracking.response.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.StringUtils;
@@ -24,6 +26,7 @@ import com.transport.tracking.model.VehRouteDetail;
 @RequestMapping ("/api/v1/transport")
 public class TransportController {
 
+    private static final Logger log = LoggerFactory.getLogger(TransportController.class);
     @Autowired
     private TransportService transportService;
 
@@ -160,6 +163,20 @@ public class TransportController {
         map.put("success", "success");
         return map;
     }
+
+    @PostMapping ("/unlock/multipletrips")
+    public @ResponseBody Map<String, String> unlockTrips(AccessTokenVO accessTokenVO, @RequestBody List<TripVO> request) throws JsonProcessingException {
+        log.info("Received multiple unlock request with {} trips", request.size());
+        for (TripVO tripVO : request) {
+            log.info("Payload before unlock - TripCode: {}, Optistatus: {}", tripVO.getItemCode(), tripVO.getOptistatus());
+        }
+        transportService.unlockTrips(request);
+        Map<String, String> map = new HashMap<>();
+        map.put("success", "success");
+        log.info("Multiple unlock processing completed");
+        return map;
+    }
+
     @PostMapping ("/delete/trips")
     public @ResponseBody Map<String, String> deleteTrips(AccessTokenVO accessTokenVO, @RequestBody List<TripVO> request) throws JsonProcessingException {
         transportService.deleteTrips(request);
