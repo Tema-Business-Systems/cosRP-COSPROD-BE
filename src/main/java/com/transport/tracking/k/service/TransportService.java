@@ -2036,6 +2036,12 @@ private static final String DELTE_ALLOCATED_QUERY_UPD = "delete from  {schema}.{
             String docid = rec.getString("docnum");
             String doctype = rec.getString("doctype");
             if(!LatestDocList.contains(docid)) {
+                //These two lines added for reseting licence plate field--by Shubham
+                log.info("Excluded doc detected, resetting license plate for docnum: {}", docid);
+                int docNum = getDocType(doctype);
+                this.updateDocsAtTripCreation(tripVO.getItemCode(),(String)((Map<String, Object>)tripVO.getVehicleObject()).get("codeyve"),format.format(tripVO.getDate()),docNum,docid,tripVO.getTrips(),1, "");
+                log.info("License plate reset completed for excluded docnum: {}", docid);
+                //end here
                 updateDocumentAfterDeleteDocument(docid , doctype);
             }
             AcutalDocList.add(docid);
