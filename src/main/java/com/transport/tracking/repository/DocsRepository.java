@@ -21,14 +21,14 @@ public interface DocsRepository extends CrudRepository<Docs, String> {
     public Docs findByDocnum(String docnum);
 
 
-    @Query(value="select * from COSPILOT.XSCHDOCS c where c.SITE IN (?1) and (c.DOCDATE between ?2 AND ?3) ORDER BY c.DOCDATE ,c.TRIPNO , c.SEQ",nativeQuery = true)
+    @Query(value="select * from COSPROD.XSCHDOCS c where c.SITE IN (?1) and (c.DOCDATE between ?2 AND ?3) ORDER BY c.DOCDATE ,c.TRIPNO , c.SEQ",nativeQuery = true)
     public List<Docs> getDocswithRangeAndSite(List<String> site, Date sdate, Date edate);
 
-    @Query(value="select * from COSPILOT.XSCHDOCS c where  c.DOCDATE between ?1 AND ?2 ORDER BY c.DOCDATE,c.TRIPNO , c.SEQ",nativeQuery = true)
+    @Query(value="select * from COSPROD.XSCHDOCS c where  c.DOCDATE between ?1 AND ?2 ORDER BY c.DOCDATE,c.TRIPNO , c.SEQ",nativeQuery = true)
     public List<Docs> getDocswithRange(Date sdate, Date edate);
 
     @Query(value="select d.*, x.PRODUCTCODE, x.PRODUCTNAME,x.PRODUCTCATEG, x.QUANTITY, x.UOM, x.DOCLINENO \n" +
-            " from COSPILOT.XSCHDOCS d left join COSPILOT.XSCHDOCSD x on d.DOCNUM = x.DOCNUM d.SITE IN (?1) AND (d.DOCDATE BETWEEN  ?2 AND ?3) ORDER BY d.TRIPNO, d.SEQ  ASC",nativeQuery = true)
+            " from COSPROD.XSCHDOCS d left join COSPROD.XSCHDOCSD x on d.DOCNUM = x.DOCNUM d.SITE IN (?1) AND (d.DOCDATE BETWEEN  ?2 AND ?3) ORDER BY d.TRIPNO, d.SEQ  ASC",nativeQuery = true)
     public List<Docs> getDocswithRangeAndSite2(List<String> site, Date sdate, Date edate);
 
 

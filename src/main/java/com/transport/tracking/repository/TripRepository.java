@@ -36,10 +36,10 @@ public interface TripRepository extends CrudRepository<Trip, BigDecimal> {
     public Trip findByTripCode(String tripCode);
 
 
-    @Query(value="select top 1 * from COSPILOT.XX10TRIPS c where c.CODE = :veh and c.DOCDATE <= :date ORDER BY c.DOCDATE DESC,c.TRIPS DESC ",nativeQuery = true)
+    @Query(value="select top 1 * from COSPROD.XX10TRIPS c where c.CODE = :veh and c.DOCDATE <= :date ORDER BY c.DOCDATE DESC,c.TRIPS DESC ",nativeQuery = true)
    public Trip findLatestDepartSites(@Param("veh") String veh,@Param("date") Date date);
 
-    @Query(value="select distinct c.CODE,c.DOCDATE,c.ROWID from COSPILOT.XX10TRIPS c where c.SITE = ?1 and (c.DOCDATE between ?2 AND ?3)",nativeQuery = true)
+    @Query(value="select distinct c.CODE,c.DOCDATE,c.ROWID from COSPROD.XX10TRIPS c where c.SITE = ?1 and (c.DOCDATE between ?2 AND ?3)",nativeQuery = true)
     public List<Trip> getCodeAndDocdateOnly(String veh,Date sdate,Date edate);
 
 
@@ -49,12 +49,12 @@ public interface TripRepository extends CrudRepository<Trip, BigDecimal> {
     @Query(value="select c from  Trip c where c.code = ?1 and c.docdate = CAST(?2 as timestamp without time zone) order by trips",nativeQuery = true)
     public List<Trip> getTripsByCodeAndDocdate1(String veh,String docdate);
 
-  @Query(value="select * from COSPILOT.XX10TRIPS c where c.SITE IN (?1) and (c.DOCDATE between ?2 AND ?3)",nativeQuery = true)
+  @Query(value="select * from COSPROD.XX10TRIPS c where c.SITE IN (?1) and (c.DOCDATE between ?2 AND ?3)",nativeQuery = true)
     public List<Trip> getTripswithRangeAndSite(List<String> site,Date sdate,Date edate);
 
 
 
-    @Query(value="select * from COSPILOT.XX10TRIPS c where c.CODE = :veh and c.DOCDATE = to_timestamp(:date,'YYYY-MM-DD') ORDER BY c.TRIPS",nativeQuery = true)
+    @Query(value="select * from COSPROD.XX10TRIPS c where c.CODE = :veh and c.DOCDATE = to_timestamp(:date,'YYYY-MM-DD') ORDER BY c.TRIPS",nativeQuery = true)
     public List<Trip> getTripsByCodeAndDocdate(@Param("veh") String veh,@Param("date") String date);
 
 

@@ -14,11 +14,11 @@ public interface DocDsRepository extends CrudRepository<DocDs, String> {
 
     public List<DocDs> findByDocnum(String docnum);
 
-    @Query(value="select * from COSPILOT.XSCHDOCSD c where c.DOCNUM = ?1 ",nativeQuery = true)
+    @Query(value="select * from COSPROD.XSCHDOCSD c where c.DOCNUM = ?1 ",nativeQuery = true)
     public List<DocDs> getprodsbyDocnum(String docnum);
 
 
-    @Query(value="select DISTINCT ORDERNO from COSPILOT.XSCHDOCSD c where c.DOCNUM = ?1 ",nativeQuery = true)
+    @Query(value="select DISTINCT ORDERNO from COSPROD.XSCHDOCSD c where c.DOCNUM = ?1 ",nativeQuery = true)
     public List<String> getOrderNoByDocnum(String docnum);
 
 

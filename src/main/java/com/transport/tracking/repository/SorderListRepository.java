@@ -16,12 +16,12 @@ public interface SorderListRepository extends CrudRepository<SorderList, Integer
     public List<SorderList> findAll();
 
 
-    @Query(value="select top 1 * from COSPILOT.X10CSOH c where c.XTSOHNUM_0 = ?1 ORDER BY c.XTLINENUM_0 DESC ",nativeQuery = true)
+    @Query(value="select top 1 * from COSPROD.X10CSOH c where c.XTSOHNUM_0 = ?1 ORDER BY c.XTLINENUM_0 DESC ",nativeQuery = true)
     public SorderList getLatestLineNobyOrderNo(String docnum);
 
-    @Query(value="select  * from COSPILOT.X10CSOH c where c.XTVRNUM_0 = ?1  AND XTPTHNUM_0 = '' ",nativeQuery = true)
+    @Query(value="select  * from COSPROD.X10CSOH c where c.XTVRNUM_0 = ?1  AND XTPTHNUM_0 = '' ",nativeQuery = true)
     public List<SorderList> getOpenDocsSObyRouteCode(String vrnum);
 
-    @Query(value="select  top 1 * from COSPILOT.X10CSOH c where c.XTVRNUM_0 = ?1 AND c.XTSOHNUM_0 = ?2  AND XTPTHNUM_0 = '' ",nativeQuery = true)
+    @Query(value="select  top 1 * from COSPROD.X10CSOH c where c.XTVRNUM_0 = ?1 AND c.XTSOHNUM_0 = ?2  AND XTPTHNUM_0 = '' ",nativeQuery = true)
     public SorderList getOpenDocsbyRouteCodeAndSO(String vrnum, String docnum);
 }
