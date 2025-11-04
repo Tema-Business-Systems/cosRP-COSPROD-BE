@@ -15,7 +15,8 @@ import java.util.Map;
 import java.util.Objects;
 
 @RestController
-@CrossOrigin(origins={"http://localhost:3000","http://localhost:8052","http://localhost:8051","http://172.16.0.4:8051","http://172.16.0.4:8052","http://csrouteplanner.kerrcloud.com:8051","http://csrouteplanner.kerrcloud.com:8052","https://csrouteplanner.kerrcloud.com:8051","https://csrouteplanner.kerrcloud.com:8052"})
+//@CrossOrigin(origins={"http://localhost:3000","http://localhost:8052","http://localhost:8051","http://172.16.0.4:8051","http://172.16.0.4:8052","http://csrouteplanner.kerrcloud.com:8051","http://csrouteplanner.kerrcloud.com:8052","https://csrouteplanner.kerrcloud.com:8051","https://csrouteplanner.kerrcloud.com:8052"})
+@CrossOrigin(origins={"http://localhost:3000","http://localhost:8054","http://localhost:8055","https://csrouteplanner.kerrcloud.com:8054","https://csrouteplanner.kerrcloud.com:8055","http://csrouteplanner.kerrcloud.com:8055","http://csrouteplanner.kerrcloud.com:8054"})
 @RequestMapping("/api/v1/user")
 @Slf4j
 public class UserController {
