@@ -296,22 +296,57 @@ public class AsyncService {
         return sb.toString();
     }
 
+//   commented by Shubham for starttime issue
+//    public List<TimeVO> getTimeList(String timeStr) {
+//        List<TimeVO> timeList = new ArrayList<>();
+//        try {
+//            String actualTime = StringUtils.replace(timeStr, "0", "");
+//            int time = Integer.parseInt(actualTime);
+//            if(time > 23) {
+//
+//            }else {
+//                for(int i = 0; i < hours; i ++) {
+//                    TimeVO timeVO = new TimeVO();
+//                    timeVO.setValue(String.valueOf(i * 12));
+//                    timeVO.setLabel(String.format("%s:%s", time + i, "00"));
+//                    timeList.add(timeVO);
+//                }
+//            }
+//        }catch (Exception e) {
+//            return this.getTimeList("0800");
+//        }
+//        return timeList;
+//    }
+
     public List<TimeVO> getTimeList(String timeStr) {
         List<TimeVO> timeList = new ArrayList<>();
         try {
-            String actualTime = StringUtils.replace(timeStr, "0", "");
-            int time = Integer.parseInt(actualTime);
-            if(time > 23) {
-
-            }else {
-                for(int i = 0; i < hours; i ++) {
-                    TimeVO timeVO = new TimeVO();
-                    timeVO.setValue(String.valueOf(i * 12));
-                    timeVO.setLabel(String.format("%s:%s", time + i, "00"));
-                    timeList.add(timeVO);
-                }
+            if (!StringUtils.hasText(timeStr) || timeStr.length() < 4)
+            {
+                timeStr = "0800"; // default start time
             }
-        }catch (Exception e) {
+
+            // Extract hours and minutes properly
+            int hours = Integer.parseInt(timeStr.substring(0, 2));
+            int minutes = Integer.parseInt(timeStr.substring(2, 4));
+
+            if (hours > 23 || minutes > 59) {
+                return this.getTimeList("0800"); // fallback if invalid time
+            }
+
+            int totalIntervals = 24; // number of intervals (1 per hour)
+
+            for (int i = 0; i < totalIntervals; i++) {
+                int totalMins = (hours * 60 + minutes) + (i * 60); // 1-hour step
+                int displayHour = (totalMins / 60) % 24;
+                int displayMin = totalMins % 60;
+
+                TimeVO timeVO = new TimeVO();
+                timeVO.setValue(String.valueOf(totalMins)); // total minutes from midnight (optional)
+                timeVO.setLabel(String.format("%02d:%02d", displayHour, displayMin));
+                timeList.add(timeVO);
+            }
+        } catch (Exception e) {
             return this.getTimeList("0800");
         }
         return timeList;
